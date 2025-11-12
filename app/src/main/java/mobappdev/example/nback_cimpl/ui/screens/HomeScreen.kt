@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -26,12 +28,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +46,8 @@ import mobappdev.example.nback_cimpl.R
 import mobappdev.example.nback_cimpl.ui.viewmodels.FakeVM
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameType
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameViewModel
+import kotlin.math.absoluteValue
+import kotlin.math.round
 
 /**
  * This is the Home screen composable
@@ -63,7 +70,7 @@ fun HomeScreen(
     val gameState by vm.gameState.collectAsState()
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-
+    val context = LocalContext.current;
 
 
     Scaffold(
@@ -77,12 +84,74 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             Text(
                 modifier = Modifier.padding(32.dp),
                 text = "High-Score = $highscore",
                 style = MaterialTheme.typography.headlineLarge
             )
-            Button(onClick = vm::startGame){
+
+            var nSliderValue by remember { mutableFloatStateOf(2f) }
+            var intervalSliderValue by remember { mutableFloatStateOf(1f)}
+            var roundSliderValue by remember {mutableFloatStateOf(10f)}
+            var dimSliderValue by remember {mutableFloatStateOf(3f)}
+
+            var nValue by remember { mutableIntStateOf(2) };
+            var intervalValue by remember {mutableIntStateOf(1)};
+            var roundValue by remember {mutableIntStateOf(10)};
+            var dimValue by remember {mutableIntStateOf(3)}
+
+            Text("N = $nValue", style=MaterialTheme.typography.headlineMedium)
+            Slider(
+                value=nSliderValue,
+                onValueChange = {
+                    nSliderValue=it
+                    nValue = round(nSliderValue.absoluteValue).toInt();
+                },
+                steps=9,
+                valueRange = 1f..10f,
+                modifier=Modifier.width(300.dp)
+            )
+
+            Text("Interval = $intervalValue", style=MaterialTheme.typography.headlineMedium)
+            Slider(
+                value=intervalSliderValue,
+                onValueChange = {
+                    intervalSliderValue=it;
+                    intervalValue = round(intervalSliderValue.absoluteValue).toInt();
+                },
+                steps=9,
+                valueRange = 1f..10f,
+                modifier=Modifier.width(300.dp)
+            )
+
+            Text("Rounds = $roundValue", style=MaterialTheme.typography.headlineMedium)
+            Slider(
+                value=roundSliderValue,
+                onValueChange = {
+                    roundSliderValue=it
+                    roundValue = round(roundSliderValue.absoluteValue).toInt();
+                },
+                steps=15,
+                valueRange = 5f..20f,
+                modifier=Modifier.width(300.dp)
+            )
+
+            Text("Dimension = $dimValue", style=MaterialTheme.typography.headlineMedium)
+            Slider(
+                value=dimSliderValue,
+                onValueChange = {
+                    dimSliderValue=it
+                    dimValue = round(dimSliderValue.absoluteValue).toInt();
+                },
+                steps=3,
+                valueRange = 2f..5f,
+                modifier=Modifier.width(300.dp)
+            )
+
+            Button(onClick = {
+                vm.startGame(context, intervalValue, nValue, roundValue, dimValue)
+            }){
                 Icon(
                     painter = painterResource(id = R.drawable.play),
                     contentDescription = "Play",
@@ -110,13 +179,26 @@ fun HomeScreen(
                 var visualSelected by remember {mutableStateOf(true)}
                 val visualBgColor = if (visualSelected) vm.darkBlue else vm.skyBlue;
 
+                fun setGameType(){
+                    if(audioSelected && visualSelected){
+                        vm.setGameType(GameType.AudioVisual)
+                    }else if(audioSelected){
+                        vm.setGameType(GameType.Audio)
+                    }else{
+                        vm.setGameType(GameType.Visual)
+                    }
+                }
+
                 Button(
                     colors = ButtonDefaults.buttonColors(containerColor=audioBgColor),
                     onClick = {
                         audioSelected = !audioSelected;
-                        scope.launch {
-                            vm.setGameType(GameType.Audio);
+
+                        if(!audioSelected && !visualSelected){
+                            visualSelected = true;
                         }
+
+                        setGameType();
                     }
                 )
                 {
@@ -131,10 +213,15 @@ fun HomeScreen(
                 Button(
                     colors = ButtonDefaults.buttonColors(containerColor = visualBgColor),
                     onClick = {
+
                         visualSelected = !visualSelected;
-                        scope.launch {
-                            vm.setGameType(GameType.Visual);
+
+                        if(!audioSelected && !visualSelected){
+                            audioSelected = true;
                         }
+
+                        setGameType();
+
                     }) {
                     Icon(
                         painter = painterResource(id = R.drawable.visual),

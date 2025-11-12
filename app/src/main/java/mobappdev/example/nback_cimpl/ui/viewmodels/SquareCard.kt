@@ -1,34 +1,38 @@
 package mobappdev.example.nback_cimpl.ui.viewmodels
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.Color
 import androidx.graphics.shapes.RoundedPolygon
 import androidx.graphics.shapes.CornerRounding
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class SquareCard {
 
 
-    private var _secondColor: Color;
-    public val secondColor: Color
+    private var _secondColor = MutableStateFlow(Color(0));
+    public val secondColor: StateFlow<Color>
         get() = _secondColor
 
-    private var _color: Color;
-    public var color: Color
+    private var _color = MutableStateFlow<Color>(Color(0));
+    public val color: StateFlow<Color>
         get() = _color
-        set(value:Color){
-            _color = value;
-            _secondColor = calculateNewColor()
-        }
 
     constructor(color: Color){
-        this._color = color;
-        this._secondColor = calculateNewColor();
+        this._color.value = color;
+        this._secondColor.value = calculateNewColor();
+    }
+
+    public fun setColor(color:Color){
+        _color.value = color;
+        _secondColor.value = calculateNewColor()
     }
 
     private fun calculateNewColor():Color{
         return Color(alpha=0.5f,
-            red= if (color.red+0.1f <= 1) color.red+0.1f else 1f,
-            blue= if (color.blue+0.1f <= 1) color.blue+0.1f else 1f,
-            green= if (color.green+0.1f <= 1) color.green+0.1f else 1f
+            red= if (color.value.red+0.1f <= 1) color.value.red+0.1f else 1f,
+            blue= if (color.value.blue+0.1f <= 1) color.value.blue+0.1f else 1f,
+            green= if (color.value.green+0.1f <= 1) color.value.green+0.1f else 1f
         )
     }
 

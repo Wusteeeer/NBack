@@ -15,6 +15,7 @@ import mobappdev.example.nback_cimpl.ui.screens.HomeScreen
 import mobappdev.example.nback_cimpl.ui.screens.GameScreen
 import mobappdev.example.nback_cimpl.ui.theme.NBack_CImplTheme
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameVM
+import mobappdev.example.nback_cimpl.ui.viewmodels.State
 
 /**
  * This is the MainActivity of the application
@@ -33,6 +34,8 @@ import mobappdev.example.nback_cimpl.ui.viewmodels.GameVM
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         setContent {
             NBack_CImplTheme {
                 // A surface container using the 'background' color from the theme
@@ -44,10 +47,11 @@ class MainActivity : ComponentActivity() {
                     val gameViewModel: GameVM = viewModel(
                         factory = GameVM.Factory
                     )
+
                     val gameState by gameViewModel.gameState.collectAsState();
-                    when(gameState.eventValue){
-                        -1 -> HomeScreen(vm=gameViewModel)
-                        else -> GameScreen(vm=gameViewModel)
+                    when(gameState.state){
+                        State.HOME  -> HomeScreen(vm=gameViewModel)
+                        State.RUNNING -> GameScreen(vm=gameViewModel)
                     };
                 }
             }
