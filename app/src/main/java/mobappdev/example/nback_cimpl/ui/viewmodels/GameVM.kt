@@ -187,7 +187,7 @@ class GameVM(
 
         when(buttonType){
             "Audio" -> {
-                if(hasClickedAudio) return false;
+                if(hasClickedAudio || gameState.value.gameType == GameType.Visual) return false;
                 hasClickedAudio = true;
 
                 if(_gameState.value.eventValue == correctAudioAnswer){
@@ -197,7 +197,7 @@ class GameVM(
 
             }
             "Visual" -> {
-                if(hasClickedPosition) return false;
+                if(hasClickedPosition || gameState.value.gameType == GameType.Audio) return false;
                 hasClickedPosition = true;
 
 
