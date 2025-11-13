@@ -36,6 +36,7 @@ class UserPreferencesRepository (
         val ROUNDS = intPreferencesKey("rounds")
         val DIMS = intPreferencesKey("dims")
         val SOUNDS = intPreferencesKey("sound")
+        val LANGUAGE = intPreferencesKey("language")
         const val TAG = "UserPreferencesRepo"
     }
 
@@ -117,19 +118,33 @@ class UserPreferencesRepository (
             preferences[SOUNDS] ?: 5
         }
 
+    val language: Flow<Int> = dataStore.data
+        .catch{
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences", it)
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map{ preferences ->
+            preferences[LANGUAGE] ?: 1
+        }
+
     suspend fun saveHighScore(score: Int) {
         dataStore.edit { preferences ->
             preferences[HIGHSCORE] = score
         }
     }
 
-    suspend fun saveSettings(nback:Int, interval:Int, rounds:Int, dims:Int, sounds:Int){
+    suspend fun saveSettings(nback:Int, interval:Int, rounds:Int, dims:Int, sounds:Int, language:Int){
         dataStore.edit{preferences ->
             preferences[NBACK] = nback;
             preferences[INTERVAL] = interval;
             preferences[ROUNDS] = rounds;
             preferences[DIMS] = dims;
             preferences[SOUNDS] = sounds;
+            preferences[LANGUAGE] = language;
         }
         println("$nback + $interval + $rounds + $dims + $sounds")
 

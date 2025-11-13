@@ -1,11 +1,8 @@
 package mobappdev.example.nback_cimpl.ui.screens
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -16,18 +13,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -35,17 +34,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
 import mobappdev.example.nback_cimpl.R
 import mobappdev.example.nback_cimpl.ui.viewmodels.FakeVM
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameType
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameViewModel
+import java.util.Locale
+import java.util.Locale.getDefault
 import kotlin.math.absoluteValue
 import kotlin.math.round
 
@@ -61,6 +59,36 @@ import kotlin.math.round
  * Author: Yeetivity
  *
  */
+
+
+@Composable
+fun dropDownMenu(vm: GameViewModel){
+    var expanded by remember {mutableStateOf(false)}
+    val options = mutableSetOf("English", "French", "German", "Italian")
+
+    Button(
+        onClick={expanded = !expanded}
+    ) {
+        Text("Language: ${vm.language.collectAsState().value.toLanguageTag()}")
+    }
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = {
+            expanded = false
+        }
+    ) {
+        for(item in options){
+            DropdownMenuItem(
+                text={Text(item)},
+                onClick={
+                    vm.updateLanguage(item.uppercase())
+                    expanded = false;
+                }
+            )
+        }
+
+    }
+}
 
 @Composable
 fun HomeScreen(
@@ -177,6 +205,8 @@ fun HomeScreen(
                 modifier=Modifier.width(300.dp)
             )
 
+            dropDownMenu(vm);
+
             Button(onClick = {
                 vm.startGame(context)
             }){
@@ -188,11 +218,7 @@ fun HomeScreen(
                         .aspectRatio(3f / 2f)
                 )
             }
-            Text(
-                modifier = Modifier.padding(16.dp),
-                text = "Start Game".uppercase(),
-                style = MaterialTheme.typography.displaySmall
-            )
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

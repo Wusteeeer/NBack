@@ -54,6 +54,7 @@ interface GameViewModel {
     val rounds:StateFlow<Int>
     val dimensions:StateFlow<Int>
     val soundBites:StateFlow<Int>
+    val language: StateFlow<Locale>
 
     val purple: Color
         get() = Color(0xFF35143e)
@@ -91,6 +92,7 @@ interface GameViewModel {
     fun updateRounds(round:Int)
     fun updateDim(dim:Int)
     fun updateSound(bite:Int)
+    fun updateLanguage(language:String)
 
     fun endGame();
 }
@@ -125,6 +127,10 @@ class GameVM(
     private val _score = MutableStateFlow(0)
     override val score: StateFlow<Int>
         get() = _score
+
+    private val _language = MutableStateFlow(Locale.ENGLISH)
+    override val language: StateFlow<Locale>
+        get() = _language
 
     private val _highscore = MutableStateFlow(0)
     override val highscore: StateFlow<Int>
@@ -184,9 +190,34 @@ class GameVM(
     override fun updateSound(bite:Int){
         _soundBites.value = bite;
     }
+    override fun updateLanguage(language:String){
+        when(language){
+            "ENGLISH" -> _language.value = Locale.ENGLISH
+            "FRENCH" -> _language.value = Locale.FRENCH
+            "GERMAN" -> _language.value = Locale.GERMAN
+            "ITALIAN" -> _language.value = Locale.ITALIAN
+        }
+    }
 
+    fun languageToValue():Int{
+        when(_language.value){
+            Locale.ENGLISH -> return 1
+            Locale.FRENCH -> return 2
+            Locale.GERMAN -> return 3
+            Locale.ITALIAN -> return 4
+        }
+        return 1;
+    }
 
-
+    fun valueToLanguage(value:Int){
+        _language.value = when(value){
+            1 -> Locale.ENGLISH
+            2 -> Locale.FRENCH
+            3 -> Locale.GERMAN
+            4 -> Locale.ITALIAN
+            else -> Locale.ENGLISH
+        }
+    }
 
     override fun startGame(context: Context) {
         job?.cancel()  // Cancel any existing game loop
@@ -194,11 +225,11 @@ class GameVM(
         setGameState(State.RUNNING)
 
         //nBack = _nbackTest.value;
-
+        println(_language.value)
         textToSpeech = TextToSpeech(context){
             if(it == TextToSpeech.SUCCESS){
                 textToSpeech?.let{txtToSpeech ->
-                    txtToSpeech.language = Locale.ENGLISH
+                    txtToSpeech.language = _language.value
                     txtToSpeech.setSpeechRate(1.0f)
                 }
 
@@ -220,7 +251,7 @@ class GameVM(
         Log.d("Audio", "The follow audio sequence was generated: ${audioEvents.contentToString()}")
         job = viewModelScope.launch {
 
-            userPreferencesRepository.saveSettings(_nBack.value, _interval.value, _rounds.value, _dimensions.value, _soundBites.value)
+            userPreferencesRepository.saveSettings(_nBack.value, _interval.value, _rounds.value, _dimensions.value, _soundBites.value, languageToValue())
 
             when (gameState.value.gameType) {
                 GameType.Audio -> runAudioGame(audioEvents)
@@ -396,6 +427,17 @@ class GameVM(
                 _soundBites.value = it;
             }
         }
+        viewModelScope.launch{
+            userPreferencesRepository.language.collect{
+                _language.value = when(it){
+                    1 -> Locale.ENGLISH
+                    2 -> Locale.FRENCH
+                    3 -> Locale.GERMAN
+                    4 -> Locale.ITALIAN
+                    else -> Locale.ENGLISH
+                }
+            }
+        }
     }
 }
 
@@ -436,6 +478,8 @@ class FakeVM: GameViewModel{
         get() = MutableStateFlow(1).asStateFlow()
     override val soundBites:StateFlow<Int>
         get() = MutableStateFlow(1).asStateFlow()
+    override val language:StateFlow<Locale>
+        get() = MutableStateFlow(Locale.ENGLISH).asStateFlow()
     override fun setGameType(gameType: GameType) {
     }
 
@@ -456,6 +500,10 @@ class FakeVM: GameViewModel{
     }
 
     override fun updateDim(dim: Int) {
+
+    }
+
+    override fun updateLanguage(language:String){
 
     }
 
