@@ -1,0 +1,4 @@
+C:/Users/yoga/StudioProjects/NBack/app/.cxx/RelWithDebInfo/73n6t303/x86_64/CMakeFiles/nback_cimpl.dir
+C:/Users/yoga/StudioProjects/NBack/app/.cxx/RelWithDebInfo/73n6t303/x86_64/CMakeFiles/JniBridge.dir
+C:/Users/yoga/StudioProjects/NBack/app/.cxx/RelWithDebInfo/73n6t303/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/yoga/StudioProjects/NBack/app/.cxx/RelWithDebInfo/73n6t303/x86_64/CMakeFiles/rebuild_cache.dir

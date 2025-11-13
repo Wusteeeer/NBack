@@ -1,0 +1,1 @@
+C:\Users\yoga\StudioProjects\NBack\app\src\main\cpp\CMakeLists.txt

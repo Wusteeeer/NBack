@@ -67,7 +67,12 @@ fun HomeScreen(
     vm: GameViewModel
 ) {
     val highscore by vm.highscore.collectAsState()  // Highscore is its own StateFlow
-    val gameState by vm.gameState.collectAsState()
+    val nback by vm.nBack.collectAsState()
+    val interval by vm.interval.collectAsState();
+    val rounds by vm.rounds.collectAsState();
+    val dims by vm.dimensions.collectAsState();
+    val soundBites by vm.soundBites.collectAsState();
+
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current;
@@ -91,66 +96,89 @@ fun HomeScreen(
                 style = MaterialTheme.typography.headlineLarge
             )
 
-            var nSliderValue by remember { mutableFloatStateOf(2f) }
-            var intervalSliderValue by remember { mutableFloatStateOf(1f)}
-            var roundSliderValue by remember {mutableFloatStateOf(10f)}
-            var dimSliderValue by remember {mutableFloatStateOf(3f)}
+            var nSliderValue by remember { mutableFloatStateOf(nback.toFloat()) }
+            var intervalSliderValue by remember { mutableFloatStateOf(interval.toFloat())}
+            var roundSliderValue by remember {mutableFloatStateOf(rounds.toFloat())}
+            var dimSliderValue by remember {mutableFloatStateOf(dims.toFloat())}
+            var audioSliderValue by remember {mutableFloatStateOf(soundBites.toFloat())}
 
-            var nValue by remember { mutableIntStateOf(2) };
-            var intervalValue by remember {mutableIntStateOf(1)};
-            var roundValue by remember {mutableIntStateOf(10)};
-            var dimValue by remember {mutableIntStateOf(3)}
+            var nValue by remember { mutableIntStateOf(nback) };
+            var intervalValue by remember {mutableIntStateOf(interval)};
+            var roundValue by remember {mutableIntStateOf(rounds)};
+            var dimValue by remember {mutableIntStateOf(dims)}
+            var audioValue by remember {mutableIntStateOf(soundBites)}
 
-            Text("N = $nValue", style=MaterialTheme.typography.headlineMedium)
+
+            Text("N = $nback", style=MaterialTheme.typography.headlineMedium)
             Slider(
-                value=nSliderValue,
+                value=nback.toFloat(),
                 onValueChange = {
+
                     nSliderValue=it
                     nValue = round(nSliderValue.absoluteValue).toInt();
+                    vm.updateNBack(nValue)
+
+
                 },
-                steps=9,
-                valueRange = 1f..10f,
+                steps=5,
+                valueRange = 1f..5f,
                 modifier=Modifier.width(300.dp)
             )
 
-            Text("Interval = $intervalValue", style=MaterialTheme.typography.headlineMedium)
+            Text("Interval = $interval", style=MaterialTheme.typography.headlineMedium)
             Slider(
-                value=intervalSliderValue,
+                value=interval.toFloat(),
                 onValueChange = {
                     intervalSliderValue=it;
                     intervalValue = round(intervalSliderValue.absoluteValue).toInt();
+                    vm.updateInterval(intervalValue);
                 },
                 steps=9,
                 valueRange = 1f..10f,
                 modifier=Modifier.width(300.dp)
             )
 
-            Text("Rounds = $roundValue", style=MaterialTheme.typography.headlineMedium)
+            Text("Rounds = $rounds", style=MaterialTheme.typography.headlineMedium)
             Slider(
-                value=roundSliderValue,
+                value=rounds.toFloat(),
                 onValueChange = {
                     roundSliderValue=it
                     roundValue = round(roundSliderValue.absoluteValue).toInt();
+                    vm.updateRounds(roundValue);
                 },
                 steps=15,
                 valueRange = 5f..20f,
                 modifier=Modifier.width(300.dp)
             )
 
-            Text("Dimension = $dimValue", style=MaterialTheme.typography.headlineMedium)
+            Text("Dimension = $dims", style=MaterialTheme.typography.headlineMedium)
             Slider(
-                value=dimSliderValue,
+                value=dims.toFloat(),
                 onValueChange = {
                     dimSliderValue=it
                     dimValue = round(dimSliderValue.absoluteValue).toInt();
+                    vm.updateDim(dimValue);
                 },
                 steps=3,
                 valueRange = 2f..5f,
                 modifier=Modifier.width(300.dp)
             )
 
+            Text("Sound bites = $soundBites", style=MaterialTheme.typography.headlineMedium)
+            Slider(
+                value=soundBites.toFloat(),
+                onValueChange = {
+                    audioSliderValue=it
+                    audioValue = round(audioSliderValue.absoluteValue).toInt();
+                    vm.updateSound(audioValue)
+                },
+                steps=24,
+                valueRange = 2f..25f,
+                modifier=Modifier.width(300.dp)
+            )
+
             Button(onClick = {
-                vm.startGame(context, intervalValue, nValue, roundValue, dimValue)
+                vm.startGame(context)
             }){
                 Icon(
                     painter = painterResource(id = R.drawable.play),

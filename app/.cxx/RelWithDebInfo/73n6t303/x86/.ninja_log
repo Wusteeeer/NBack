@@ -1,0 +1,5 @@
+# ninja log v5
+27	602	7846602356822681	CMakeFiles/nback_cimpl.dir/nback.c.o	11bf3392b54227c1
+2	731	7846602358604844	CMakeFiles/JniBridge.dir/JniBridge.c.o	309a5a5fa7710b92
+607	1280	7846602363971946	C:/Users/yoga/StudioProjects/NBack/app/build/intermediates/cxx/RelWithDebInfo/73n6t303/obj/x86/libnback_cimpl.so	25a2f3d4d3796038
+1281	1708	7846602368530134	C:/Users/yoga/StudioProjects/NBack/app/build/intermediates/cxx/RelWithDebInfo/73n6t303/obj/x86/libJniBridge.so	f222b6ac8511ea71

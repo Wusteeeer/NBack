@@ -91,7 +91,7 @@ fun MyCard(it: Int, vm: GameViewModel){
 
 
     Card(
-        modifier = Modifier.size(100.dp).padding(6.dp),
+        modifier = Modifier.size(80.dp).padding(6.dp),
         elevation = CardDefaults.cardElevation(10.dp),
         colors= CardDefaults.cardColors(containerColor = vm.cloudBlue)
     ) {
@@ -166,7 +166,7 @@ fun GameScreen(
     ){
 
         Text(text="Score: ${vm.score.collectAsState().value}", style=MaterialTheme.typography.headlineLarge)
-        Text(text="N = ${vm.nBack}", style=MaterialTheme.typography.headlineLarge)
+        Text(text="N = ${vm.nBack.collectAsState().value}", style=MaterialTheme.typography.headlineLarge)
         LazyVerticalGrid(
             columns= GridCells.Fixed(vm.getDim()),
             contentPadding = PaddingValues(16.dp),
@@ -197,7 +197,7 @@ fun GameScreen(
                 audioCorrect = vm.checkMatch("Audio")
             },
             shape = RectangleShape,
-            modifier=Modifier.fillMaxWidth(0.5f).height(200.dp),
+            modifier=Modifier.fillMaxWidth(0.5f).height(175.dp),
             colors= ButtonDefaults.buttonColors(containerColor=audioColor.value),
 
             ){
@@ -226,7 +226,7 @@ fun GameScreen(
                 positionCorrect = vm.checkMatch("Visual")
             },
             shape=RectangleShape,
-            modifier=Modifier.fillMaxWidth().height(200.dp),
+            modifier=Modifier.fillMaxWidth().height(175.dp),
             colors= ButtonDefaults.buttonColors(containerColor=positionColor.value),
         ){
             Column(horizontalAlignment = Alignment.CenterHorizontally) {

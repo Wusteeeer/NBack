@@ -1,0 +1,21 @@
+# ninja log v5
+2	394	7846602154651829	CMakeFiles/nback_cimpl.dir/nback.c.o	bc33cc24ddd41dfe
+24	424	7846602154672500	CMakeFiles/JniBridge.dir/JniBridge.c.o	1bd80e7fdc4044dd
+397	676	7846602157316153	C:/Users/yoga/StudioProjects/NBack/app/build/intermediates/cxx/Debug/5u1x2v41/obj/arm64-v8a/libnback_cimpl.so	7b1fd5da983aab3a
+676	936	7846602159946808	C:/Users/yoga/StudioProjects/NBack/app/build/intermediates/cxx/Debug/5u1x2v41/obj/arm64-v8a/libJniBridge.so	f31ecc877ad8c25a
+29	600	7847398786596674	CMakeFiles/JniBridge.dir/JniBridge.c.o	1bd80e7fdc4044dd
+9	607	7847398786596674	CMakeFiles/nback_cimpl.dir/nback.c.o	bc33cc24ddd41dfe
+609	1414	7847398794724473	C:/Users/yoga/StudioProjects/NBack/app/build/intermediates/cxx/Debug/5u1x2v41/obj/arm64-v8a/libnback_cimpl.so	7b1fd5da983aab3a
+1415	1628	7847398796913376	C:/Users/yoga/StudioProjects/NBack/app/build/intermediates/cxx/Debug/5u1x2v41/obj/arm64-v8a/libJniBridge.so	f31ecc877ad8c25a
+238	1238	7847443870160470	CMakeFiles/JniBridge.dir/JniBridge.c.o	1bd80e7fdc4044dd
+14	1262	7847443869980229	CMakeFiles/nback_cimpl.dir/nback.c.o	bc33cc24ddd41dfe
+1263	2165	7847443879160054	C:/Users/yoga/StudioProjects/NBack/app/build/intermediates/cxx/Debug/5u1x2v41/obj/arm64-v8a/libnback_cimpl.so	7b1fd5da983aab3a
+2167	2907	7847443886118386	C:/Users/yoga/StudioProjects/NBack/app/build/intermediates/cxx/Debug/5u1x2v41/obj/arm64-v8a/libJniBridge.so	f31ecc877ad8c25a
+5	208	7847517076839136	CMakeFiles/nback_cimpl.dir/nback.c.o	bc33cc24ddd41dfe
+24	234	7847517076884485	CMakeFiles/JniBridge.dir/JniBridge.c.o	1bd80e7fdc4044dd
+209	495	7847517079624052	C:/Users/yoga/StudioProjects/NBack/app/build/intermediates/cxx/Debug/5u1x2v41/obj/arm64-v8a/libnback_cimpl.so	7b1fd5da983aab3a
+496	745	7847517082089262	C:/Users/yoga/StudioProjects/NBack/app/build/intermediates/cxx/Debug/5u1x2v41/obj/arm64-v8a/libJniBridge.so	f31ecc877ad8c25a
+5	133	7847518135863379	CMakeFiles/nback_cimpl.dir/nback.c.o	bc33cc24ddd41dfe
+16	151	7847518135990937	CMakeFiles/JniBridge.dir/JniBridge.c.o	1bd80e7fdc4044dd
+134	297	7847518137414679	C:/Users/yoga/StudioProjects/NBack/app/build/intermediates/cxx/Debug/5u1x2v41/obj/arm64-v8a/libnback_cimpl.so	7b1fd5da983aab3a
+297	453	7847518138992021	C:/Users/yoga/StudioProjects/NBack/app/build/intermediates/cxx/Debug/5u1x2v41/obj/arm64-v8a/libJniBridge.so	f31ecc877ad8c25a

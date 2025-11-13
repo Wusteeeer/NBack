@@ -31,6 +31,11 @@ class UserPreferencesRepository (
 ){
     private companion object {
         val HIGHSCORE = intPreferencesKey("highscore")
+        val NBACK = intPreferencesKey("nback")
+        val INTERVAL = intPreferencesKey("interval")
+        val ROUNDS = intPreferencesKey("rounds")
+        val DIMS = intPreferencesKey("dims")
+        val SOUNDS = intPreferencesKey("sound")
         const val TAG = "UserPreferencesRepo"
     }
 
@@ -47,9 +52,86 @@ class UserPreferencesRepository (
             preferences[HIGHSCORE] ?: 0
         }
 
+    val nback: Flow<Int> = dataStore.data
+        .catch{
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences", it)
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map{ preferences ->
+            preferences[NBACK] ?: 2
+        }
+
+    val interval: Flow<Int> = dataStore.data
+        .catch{
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences", it)
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map{ preferences ->
+            preferences[INTERVAL] ?: 1
+        }
+
+    val rounds: Flow<Int> = dataStore.data
+        .catch{
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences", it)
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map{ preferences ->
+            preferences[ROUNDS] ?: 10
+        }
+
+    val dims: Flow<Int> = dataStore.data
+        .catch{
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences", it)
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map{ preferences ->
+            preferences[DIMS] ?: 3
+        }
+
+    val sounds: Flow<Int> = dataStore.data
+        .catch{
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences", it)
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map{ preferences ->
+            preferences[SOUNDS] ?: 5
+        }
+
     suspend fun saveHighScore(score: Int) {
         dataStore.edit { preferences ->
             preferences[HIGHSCORE] = score
         }
+    }
+
+    suspend fun saveSettings(nback:Int, interval:Int, rounds:Int, dims:Int, sounds:Int){
+        dataStore.edit{preferences ->
+            preferences[NBACK] = nback;
+            preferences[INTERVAL] = interval;
+            preferences[ROUNDS] = rounds;
+            preferences[DIMS] = dims;
+            preferences[SOUNDS] = sounds;
+        }
+        println("$nback + $interval + $rounds + $dims + $sounds")
+
     }
 }
